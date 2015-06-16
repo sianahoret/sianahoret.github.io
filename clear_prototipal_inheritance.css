@@ -9,12 +9,16 @@ h2 {
   margin: 50px 0 20px 0;
 }
 
-#post_date {
+#post_date > * {
   float: right;
 }
 
 #post_date::after {
+  content: ".";
+  display: block;
+  height: 0;
   clear: both;
+  visibility: hidden;
 }
 
 .code, .code * {
