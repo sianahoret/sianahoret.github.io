@@ -1,0 +1,103 @@
+body {
+  font: 14px Verdana, Arial;
+  width: 1000px;
+  margin: 0 auto;
+  background-color: #F2F2F2;
+}
+
+h2 {
+  margin: 50px 0 20px 0;
+}
+
+.code, .code * {      
+  background-color: white;
+  color: #284A66;
+/*      font-family: monospace;*/
+  font-size: 13px;
+}
+  
+.code {
+  border: 1px solid #D0D0D0; 
+  padding: 6px;
+  margin: 6px 0;
+}
+
+span.code {
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+.diagram {
+  width: 450px;
+  margin: 6px auto;
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+}
+
+.very_important {
+  color: red;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+table.comparison {
+  border-spacing: 0;
+}
+
+table.comparison {
+  width: 100%;
+}
+
+table.comparison td {
+  vertical-align: top;
+  width: 50%;
+  padding: 10px 0;
+}
+
+#chapter_index {
+  padding: 5px 0;
+  position: fixed;
+  top: 250px;
+  left: -375px;  
+  width: 400px;
+  border: 1px solid black;
+  font-size: 14px;
+  background-color: black;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  opacity: 0.8;
+}
+
+#chapter_index:hover {
+  left: 0;
+}
+
+#chapter_index * {
+  color: #F2F2F2;
+}
+
+#chapter_index #list {
+  position: relative;
+  margin-right: 25px;
+}
+
+#chapter_index #label {
+  position: absolute;
+  right: -70px;
+  top: 130px;
+  letter-spacing: 8px;
+  color: #BBBBBB;
+	-webkit-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+	-o-transform: rotate(270deg);
+	transform: rotate(270deg);
+}
+
+#separator_before_comments {
+  margin-top: 100px;
+}
