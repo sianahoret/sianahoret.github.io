@@ -287,7 +287,7 @@ son.test();
 
 Вот полученная иерархия объектов (<b>зелёным цветом показана истинная цепь прототипов, серого шума нет<sup>*</sup></b>):
 
-<div id="__proto__" class="diagram" style="width:240px"><img src="images/__proto__.png"></img></div>
+<div id="__proto__" class="diagram" style="width:240px"><img src="images/proto.png"></img></div>
 
 <p>Person - это прототип для Man, Man - прототип для father, father - прототип для son, и нет никаких отдельно стоящих, косвенно причастных объектов. Такое положение вещей кажется мне легко понятным и непротиворечивым.</p>
 
@@ -511,7 +511,7 @@ Person.spawn = function(properties){
 
 <p>Итак, цель достигнута:</p>
 
-<div class="diagram" style="width: 700px"><img src="images/__proto__simplest.png"></img></div>
+<div class="diagram" style="width: 700px"><img src="images/proto-simplest.png"></img></div>
 
 <ol>
   <li>Построение иерархии объектов выглядит очень просто:
@@ -618,7 +618,7 @@ son.parent().parent() == Man; // true
 </pre>
 </div>
 
-<div class="diagram" style="width: 700px"><img src="images/__proto__simplest.png"></img></div>
+<div class="diagram" style="width: 700px"><img src="images/proto-simplest.png"></img></div>
 
 
 <h2 id="appendix" class="chapter">Приложение</h2>
