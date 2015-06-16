@@ -9,15 +9,23 @@ h2 {
   margin: 50px 0 20px 0;
 }
 
-.code, .code * {      
+#post_date {
+  float: right;
+}
+
+#post_date::after {
+  clear: both;
+}
+
+.code, .code * {
   background-color: white;
   color: #284A66;
 /*      font-family: monospace;*/
   font-size: 13px;
 }
-  
+
 .code {
-  border: 1px solid #D0D0D0; 
+  border: 1px solid #D0D0D0;
   padding: 6px;
   margin: 6px 0;
 }
@@ -63,7 +71,7 @@ table.comparison td {
   padding: 5px 0;
   position: fixed;
   top: 250px;
-  left: -375px;  
+  left: -375px;
   width: 400px;
   border: 1px solid black;
   font-size: 14px;

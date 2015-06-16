@@ -7,8 +7,10 @@
 </head>
 
 <body>
-  
+
 <h1>Простое и понятное прототипное наследование</h1>
+
+<p id="post_date">Март 2012</p>
 
 <h2 id="foreword" class="chapter">Предисловие</h2>
 
@@ -41,7 +43,7 @@
 
 <p>Во-первых, я до этого дошёл сам ("изобрёл это колесо", если хотите), и только потом, уже чётко понимая, до чего я дошёл, нагуглил внятное и недвусмысленное изложение этой идеи. Пока я доходил, я обзавёлся собственными "переживаниями" на этот счёт. Я хочу поделиться с вами своей собственной аргументацией того, зачем ЭТО нужно - может, для кого-то эта аргументация окажется достаточно веской или более доступно изложенной.</p>
 
-<p>Во-вторых, возможно кто-то из вас этого не знал или знал, но не обратил на это внимания. Лично я год тому назад этого не знал. Рассматриваемвй подход не особо популярен. Возможно, вскоре ситуация изменится (забегая вперёд, скажу, что последний стандарт ECMAScript к этому располагает).</p>
+<p>Во-вторых, возможно кто-то из вас этого не знал или знал, но не обратил на это внимания. Лично я год тому назад этого не знал. Рассматриваемвй подход не особо популярен. Возможно, вскоре ситуация изменится (забегая вперёд, скажу, что последний стандарт ECMAScript [на момент написания статьи это был ES5] к этому располагает).</p>
 
 <p>И наконец, я попытаюсь предложить некоторое улучшение этого альтернативного подхода.</p>
 
@@ -52,7 +54,7 @@
 <p><b>Если говорить о языках программирования, то лично для меня язык тем лучше, чем меньшим количеством операторов, ключевых слов и абстракций он позволяет решать задачу</b> (конечно, в пределах разумного - не советуйте мне удовлетворить мою страсть программированием с ипользованием исключительно единиц и нулей).</p>
 
 <p><b>Я считаю язык javascript неплохим примером того, как мощные по функциональности вещи могут выглядеть достаточно просто.</b> Как это ни странно, это обстоятельство играет злую шутку с самим javascript - некоторым людям кажется, что он слишком прост для серьёзных задач. Я много раз слышал что-то наподобие "javascript - это язык сценариев" или "javascript - это простенький язык для написания обработчиков событий в браузере".</p>
-  
+
 <p>Я часто слышу от коллег, что javascript "многословен"... Пожалуй, он <b>длиннословен, но не многословен</b>! Да, вездесущее слово "function" могло бы быть и покороче. Зато оно интуитивно понятно (согласитесь - понятнее, чем "->" и даже чем "def"). Но в javascript очень многие вещи делаются с помощью довольно короткого "словаря терминов", заметно более короткого, чем в больштнстве объектно-ориентированных языков. Я утверждаю, что <b>javascript - один из лучших образцов достаточно лаконичного языка програмиирования, который при этом является вполне читаемым</b>, а не похож на шифровки Юстаса Алексу (как, например, Perl).</p>
 <p><b>Например, почти все действия по манипуляции с объектами возможно выполнить при помощи двух операторов</b>: "<b>.</b>" (или "[]" как динамической разновидности точки) <b>и "="</b >, тогда как в других языках требуется прибегать к использованию тьмы ключевых слов, операторов и прочих приёмов.</p>
 
@@ -63,7 +65,7 @@
 <pre>
 obj.age = 5;                  // не надо никакого "instance_variable_set", "Emit", и, уж тем более, перекомпиляции
 </pre>
-</div> 
+</div>
 
 2) Имеется объект obj, нужно зачитать значение его свойства с именем, содержащимся в строковой переменной propName:
 
@@ -144,7 +146,7 @@ obj.m = function(){
 
 <div class="diagram" style="width: 120px"><img src="images/prototypal_inheritance.png"></img></div>
 
-<p>Я назвал объекты Person и Man с большой буквы, чтобы было нагляднее, где в классическом наследовании использовались бы классы. Если Вам так удобнее мыслить - можете называть их "классами", но father и son ничем технически не отличаются от Man.<b> Обратите внимание на отсутствие объекта Pupkin! Его роль (носителя фамилии) выполняет father - и это ведь логично!?</b></p> 
+<p>Я назвал объекты Person и Man с большой буквы, чтобы было нагляднее, где в классическом наследовании использовались бы классы. Если Вам так удобнее мыслить - можете называть их "классами", но father и son ничем технически не отличаются от Man.<b> Обратите внимание на отсутствие объекта Pupkin! Его роль (носителя фамилии) выполняет father - и это ведь логично!?</b></p>
 
 <p>Мне кажется, что <b>эта модель значительно ближе к естественному человеческому мышлению</b>, чем рассмотренная ранее модель при классическом наследовании. Если случайного человека попросить изобразить графически понятия Человек, Мужчина, Отец и Сын в порядке "от общего к частному", то, скорее всего, он не станет выдумывать какие-то дополнительные сущности.</p>
 
@@ -155,7 +157,7 @@ obj.m = function(){
 <p>В чём проблема? Дело в том, что <b>изначально предложенный и много лет используемый способ доступа к цепи прототипов и управления ею в javascript, таков, что двойственность, описанная в разделе "Критика классического наследования" продолжает присутствовать</b>.</p>
 
 <p>Один из двух способов создания объекта в javascript - с помощью оператора new, которому в качестве операнда передаётся функция-инициализатор. Свойство prototype этой функции указывает на автоматически создаваемый объект, который будет выступать в роли прототипа для объекта-возврата оператора new:</p>
-  
+
 <div class="code">
 <pre>
 var Person = function(name){
@@ -222,10 +224,10 @@ Obj.constructor = Person;
 </div>
 
 <p class="very_important"><b>Что я предлагаю? Предлагаю забыть оператор new, свойства constructor и prototype, а также операторы typeof и instanceof.</b></p>
-  
-<h2 id="clear_prototypal_inheritance" class="chapter">Простое и понятное прототипное наследование в javascript</h2> 
 
-<h3>Суть решения</h3> 
+<h2 id="clear_prototypal_inheritance" class="chapter">Простое и понятное прототипное наследование в javascript</h2>
+
+<h3>Суть решения</h3>
 
 <p>Я хочу использовать прототипное наследование без выше рассмотренного "серого шума" и "раздвоения личностей".</p>
 
@@ -235,24 +237,24 @@ Obj.constructor = Person;
 <pre>
 <b>var Person = {
  name: 'Abstract person',
- ancestorCount: function(){ 
-   return (this.__proto__ && this.__proto__.ancestorCount) ? this.__proto__.ancestorCount() + 1 : 0; 
+ ancestorCount: function(){
+   return (this.__proto__ && this.__proto__.ancestorCount) ? this.__proto__.ancestorCount() + 1 : 0;
  }
 };
 
-var Man = { 
+var Man = {
   <span class="very_important">__proto__: Person</span>,
-  name: 'Abstract man' 
+  name: 'Abstract man'
 };
 
-var father = { 
+var father = {
   <span class="very_important">__proto__: Man</span>,
-  name: 'Father' 
+  name: 'Father'
 };
 
-var son = { 
+var son = {
   <span class="very_important">__proto__: father</span>,
-  name: 'Son' 
+  name: 'Son'
 };
 </b>
 
@@ -264,7 +266,7 @@ Person.test = function(){
   console.info('Person is my ancestor: ', Person.isPrototypeOf(this));
   console.info('Man is my ancestor: ', Man.isPrototypeOf(this));
   console.info('father is my ancestor: ', father.isPrototypeOf(this));
-  console.info('My immediate parent:', Object.getPrototypeOf(this)); 
+  console.info('My immediate parent:', Object.getPrototypeOf(this));
   console.info('***************');
 };
 
@@ -293,7 +295,7 @@ var Person = {
 };
 </pre>
 </div>
- 
+
 <b>
 <div class="very_important">
 <p>Чем мне нравится такой подход:</p>
@@ -304,7 +306,7 @@ var Person = {
 </b>
 </div>
 
-</p>Было бы неплохо, чтобы выражение <span class="code">p1 instanceof Person</span> возвращало true - ведь это логично? Но <a href="#try_to_deceive_instanceof">я не нашёл способа сделать это.</a></p>  
+</p>Было бы неплохо, чтобы выражение <span class="code">p1 instanceof Person</span> возвращало true - ведь это логично? Но <a href="#try_to_deceive_instanceof">я не нашёл способа сделать это.</a></p>
 
 <p>Отлично, но свойство __proto__ нестандартизированное. Базировать свою программу на том, чего может не стать без предупреждения, не очень-то хорошо.</p>
 
@@ -319,8 +321,8 @@ var Person = {
 <pre>
 <b>var Person = {
  name: 'Abstract person',
- ancestorCount: function(){ 
-   return (this.__proto__ && this.__proto__.ancestorCount) ? this.__proto__.ancestorCount() + 1 : 0; 
+ ancestorCount: function(){
+   return (this.__proto__ && this.__proto__.ancestorCount) ? this.__proto__.ancestorCount() + 1 : 0;
  }
 };
 
@@ -342,7 +344,7 @@ Person.test = function(){
   console.info('Person is my ancestor: ', Person.isPrototypeOf(this));
   console.info('Man is my ancestor: ', Man.isPrototypeOf(this));
   console.info('father is my ancestor: ', father.isPrototypeOf(this));
-  console.info('My immediate parent:', Object.getPrototypeOf(this)); 
+  console.info('My immediate parent:', Object.getPrototypeOf(this));
   console.info('***************');
 };
 
@@ -406,16 +408,16 @@ son = Object.create(father);
 
 <div class="code">
 <pre>
-if (!Object.create) {  
-    Object.create = function (proto) {  
-        if (arguments.length > 1) {  
-            throw new Error('Object.create implementation only accepts the first parameter.');  
-        }  
-        <b>function F() {}  
-        F.prototype = proto;  
+if (!Object.create) {
+    Object.create = function (proto) {
+        if (arguments.length > 1) {
+            throw new Error('Object.create implementation only accepts the first parameter.');
+        }
+        <b>function F() {}
+        F.prototype = proto;
         return new F();</b>
-    };  
-}  
+    };
+}
 </pre>
 </div>
 
@@ -437,7 +439,7 @@ obj = Object.create(Man, {
 </pre>
 </div>
 
-<p>Жить можно, но приятного мало. Можно скрыть лишнюю сложность, например, так:</p> 
+<p>Жить можно, но приятного мало. Можно скрыть лишнюю сложность, например, так:</p>
 <div class="code">
 <pre>
 Object.spawn = function(proto, <b>properties</b>){
@@ -446,9 +448,9 @@ Object.spawn = function(proto, <b>properties</b>){
   if(Object.create){ // ES5
     o = Object.create(proto);
   } else { // ES3
-    function F() {} 
+    function F() {}
     F.prototype = proto;
-    o = new F(); 
+    o = new F();
   }
 <b>
   for(p in properties){
@@ -622,23 +624,23 @@ son.parent().parent() == Man; // true
 <pre>
 using System;
 using System.Reflection;
- 
+
 class A {
- 
+
   public static int test(){ return 5; }
   public static string f = "asdf";
- 
+
   public static void Main(){
     A a = new A();        // a - instance of class A
     Type c = a.GetType(); // c - "Class object" of class A
-    
+
     int i = (int)c.InvokeMember("test", BindingFlags.Default | BindingFlags.InvokeMethod, null, null, new object[] { });
     Console.WriteLine(i); // 5
-    
+
     string s = (string)c.InvokeMember("f", BindingFlags.Default | BindingFlags.GetField, null, null, new object[] { });
     Console.WriteLine(s); // asdf
-  }  
-   
+  }
+
 }
 </pre>
 </div>
@@ -654,9 +656,9 @@ var Person = {
   <b>prototype: this</b> // чтоб instanceof моего истинного потомка возвращал true
 };
 
-var p1 = { 
+var p1 = {
   __proto__: Person,
-  name: 'Test person' 
+  name: 'Test person'
 };
 
 p1 instanceof Person; // TypeError: invalid 'instanceof' operand Person
@@ -719,16 +721,16 @@ hcb_user = {
     anonymous:'Аноним',
     mod_label:'(mod)',
     subscribe:'email me replies',
-    
+
     msg_thankyou:'<b>Спасибо за Ваш комментарий!</b>',
     msg_approval:'(этот комеентарий не будет опубликован, пока Вы не подтвердите его)',
     msg_approval_required:'<b>Спасибо за Ваш комментарий! Ваш комментарий появится, как только модератор подтвердит его.</b>',
-    
+
     err_bad_html:'Ваш комментарий содержит плохой html.',
     err_bad_email:'Введите валидный email-адрес.',
     err_too_frequent:'Вы должны подождать несеолько секунд перед созданием следующего комментария.',
     err_comment_empty:'Ваш комментарий не отправлен, так как он пустой!',
-    
+
     //SETTINGS
     MAX_CHARS: 2048,
     PAGE:'', // ID of the webpage to show comments for. defaults to the webpage the user is currently visiting.
