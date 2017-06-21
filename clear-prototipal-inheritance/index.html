@@ -1,0 +1,754 @@
+<html>
+
+<head>
+  <title>Clear Prototypal Inheritance and javascript</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link href="clear_prototipal_inheritance.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+
+<h1>Простое и понятное прототипное наследование</h1>
+
+<div id="post_date"><div><a href="https://github.com/sianahoret">Сергей Ищенко</a>, Март 2012</div></div>
+
+<hr/>
+<p>
+<i>По этой статье я делал доклад в апреле 2012 на "Coffee & Code" в г. Донецке. Спустя несколько месяцев я написал библиотеку <a href="https://github.com/sianahoret/TruePrototyping.js">TruePrototyping.js</a>, реализующую описанную в статье идею и пригодную для практического использования.</i>
+</p>
+<hr/>
+
+<h2 id="foreword" class="chapter">Предисловие</h2>
+
+<p>В этой статье я попытаюсь показать, что <b>прототипное наследование - очень простая идиома, при этом, по мощности своей не уступающая классическому наследованию, и даже превосходящая его</b>.</p>
+
+<p>Без сомнения, <b>javascript - самый распространённый язык, в котором используется прототипное наследование</b>. Но, к сожалению, "традиционный" инструментарий наследования в javascript несколько запутанный. Я хочу рассмотреть более простой и понятный способ.</p>
+
+<p>Вот пара статей, довольно внятно объясняющих, как реализовано наследование в javascript:</p>
+<ul>
+  <li><a href="http://msdn.microsoft.com/en-us/scriptjunkie/ff852808.aspx">Prototypes and Inheritance in JavaScript /какой-то Scott Allen/</a></li>
+  <li><a href="http://dmitrysoshnikov.com/ecmascript/ru-javascript-the-core/">JavaScript. Ядро /Dmitry Soshnikov/</a>
+</ul>
+
+<p>Вот статья и пост, обличающие некоторую <b>путаницу в ООП-инструментарии языка javascript</b>:</p>
+<ul>
+  <li><a href="http://joost.zeekat.nl/constructors-considered-mildly-confusing.html">Constructors considered mildly confusing /некий Joost Diepenmaat/</a></li>
+  <li><a href="http://www.quora.com/JavaScript/What-is-the-difference-between-__proto__-and-prototype">What is the difference between "__proto__" and "prototype"? /просто форум/</a></li>
+</ul>
+
+<p>Вот несколько статей, рассматривающих альтернативный<b>, менее запутанный, подход</b>:</p>
+<ul>
+  <li><a href="http://javascript.crockford.com/prototypal.html">Prototypal Inheritance in JavaScript /Douglas Crockford/</a></li>
+  <li><a href="http://howtonode.org/prototypical-inheritance">Prototypal Inheritance /Tim Caswell, /</a></li>
+  <li><a href="http://learn.javascript.ru/tutorial/prototype">Прототипное наследование /Илья Кантор/</a></li>
+</ul>
+
+<p>Основная суть этого "альтернативного подхода", изложена (с примерами кода на javascript) даже в википедии, в <a href="http://en.wikipedia.org/wiki/Prototype-based_programming">статье о прототипном наследовании</a> - там это называется "<b>true prototypal inheritance style</b>" - не я это так назвал :).</p>
+
+<p>Так о чём тогда я собираюсь говорить - всё ведь уже сказано?!</p>
+
+<p>Во-первых, я до этого дошёл сам ("изобрёл это колесо", если хотите), и только потом, уже чётко понимая, до чего я дошёл, нагуглил внятное и недвусмысленное изложение этой идеи. Пока я доходил, я обзавёлся собственными "переживаниями" на этот счёт. Я хочу поделиться с вами своей собственной аргументацией того, зачем ЭТО нужно - может, для кого-то эта аргументация окажется достаточно веской или более доступно изложенной.</p>
+
+<p>Во-вторых, возможно кто-то из вас этого не знал или знал, но не обратил на это внимания. Лично я год тому назад этого не знал. Рассматриваемвй подход не особо популярен. Возможно, вскоре ситуация изменится (забегая вперёд, скажу, что последний стандарт ECMAScript [на момент написания статьи это был ES5] к этому располагает).</p>
+
+<p>И наконец, я попытаюсь предложить некоторое улучшение этого альтернативного подхода.</p>
+
+<h2 id="simple_and_powerful" class="chapter">Javascript - мощное может быть простым</h2>
+
+<p>В области разработки ПО постоянно происходит поиск путей борьбы со сложностью. Появляются библиотеки и языки, которые предлагают решать задачи более просто, компактно, делают программу более лёгкой для осознания, создания и сопровождения. Грубо говоря, большинство программистов превращаюися в DSL-юзеров.</p>
+
+<p><b>Если говорить о языках программирования, то лично для меня язык тем лучше, чем меньшим количеством операторов, ключевых слов и абстракций он позволяет решать задачу</b> (конечно, в пределах разумного - не советуйте мне удовлетворить мою страсть программированием с ипользованием исключительно единиц и нулей ;)).</p>
+
+<p><b>Я считаю язык javascript неплохим примером того, как мощные по функциональности вещи могут выглядеть достаточно просто.</b> Как это ни странно, это обстоятельство играет злую шутку с самим javascript - некоторым людям кажется, что он слишком прост для серьёзных задач. Я много раз слышал что-то наподобие "javascript - это язык сценариев" или "javascript - это простенький язык для написания обработчиков событий в браузере".</p>
+
+<p>Я часто слышу от коллег, что javascript "многословен"... Пожалуй, он <b>длиннословен, но не многословен</b>! Да, вездесущее слово "function" могло бы быть и покороче. Зато оно интуитивно понятно (согласитесь - понятнее, чем "def" и даже чем "->"). Но в javascript очень многие вещи делаются с помощью довольно короткого "словаря терминов", заметно более короткого, чем в больштнстве объектно-ориентированных языков. Я утверждаю, что <b>javascript - один из лучших образцов достаточно лаконичного языка програмиирования, который при этом является вполне читаемым</b>, а не похож на шифровки Юстаса Алексу (как, например, Perl).</p>
+<p><b>Например, многие действия по манипуляции с объектами возможно выполнить при помощи двух операторов</b>: "<b>.</b>" (или "[]" как динамической разновидности точки) <b>и "="</b >, тогда как в других языках требуется прибегать к использованию тьмы ключевых слов, операторов и прочих приёмов.</p>
+
+<p><b>Приведу несколько простых примеров - я не знаю, в каком языке они выглядят лаконичнее и интуитивно понятнее:</b></p>
+1) Имеется объект obj, нужно (на этапе выполнения) добавить в него свойство age со значением 5:
+
+<div class="code">
+<pre>
+obj.age = 5;                  // не надо никакого "instance_variable_set", "Emit", и, уж тем более, перекомпиляции
+</pre>
+</div>
+
+2) Имеется объект obj, нужно зачитать значение его свойства с именем, содержащимся в строковой переменной propName:
+
+<div class="code">
+<pre>
+var value = obj[propName];    // не надо никакого "send" и, уж тем более, "InvokeMember" с десятком параметров
+</pre>
+</div>
+
+3) У объекта obj имеется метод m. требуется переопределить его так, чтобы в новой реализации использовать старую:
+
+<div class="code">
+<pre>
+obj.oldM = obj.m;             // не надо никакого "unbind" или "method_alias_chain"
+obj.m = function(){           // не надо никакого "bind" или "define_method"
+  ...
+  this.oldM();
+  ...
+};
+
+// или даже так:
+
+var oldM = obj.m;             // локальная переменная
+obj.m = function(){
+  ...
+  oldM();                     // замыкание на локальную переменную
+  ...
+};
+</pre>
+</div>
+
+<p>
+Конечно, этому способствуют такие свойства javascript, как:
+<ul>
+<li>динамичность языка (возможность изменять структуру объекта на этапе выполнения),</li>
+<li>функции являются объектами первого класса (их можно присваивать переменным и передавать в качестве параметров),</li>
+<li>наличие замыканий и возможность использовать их где угодно.</li>
+</ul>
+</p>
+
+<p>Ну да ладно, возвращаюсь к основной теме. В данной статье я хочу поговорить об ООП, а конкретнее - о наследовании.</p>
+
+
+<h2 id="class_inheritance" class="chapter">Что плохого в классическом наследовании?</h2>
+
+<p>Что такое классическое наследование при поверхностном рассмотрении? Есть две сущности: КЛАСС и ОБЪЕКТ. <b>КЛАСС - абстрактная сущность, описывающая структуру и поведение и существующая только в исходном коде. На этапе выполнения программы класс может быть многократно инстанцирован в объект, имеющий эту структуру и реализующий это поведение</b>. Например, если в программе определён класс Man и создан его экземпляр Vasya, то на этапе выполнения существует только объект Vasya как воплощение класса Man. То есть, класс и экземпляр соотносятся как чертёж детали и собственно деталь, изготовленная по этому чертежу.</p>
+
+<p>Если считать, что на этом всё и заканчивается, то всё достаточно просто и понятно.</p>
+
+<p>Первое сомнение закрадывается в связи с понятием "статический член класса". В классе разрешается объявить поле, которое разделяется между всеми экземплярами этого класса. Значит это поле где-то "живёт" на этапе выполненния?! Значит <b>есть где-то в выполняющейся программе некий объект, представляющий этот класс, но который не является экземпляром этого класса.</b></p>
+
+<p>Эта двойственность становится ещё очевиднее с появлением полноценной рефлексии (Java, C#). Возникает явное (вместо мистического и невидимого, как в C++) понятие "объект класса" с примечанием "не путать с экземпляром". Объект класса является носителем метаинформации о классе (имени класса, его структуре, его методаx), а также <a href="#static_members_via_class_object">носителем значений статических полей класса</a>. </p>
+
+<p>Итак, сущность КЛАСС на этапе выполнения программы раздваивается: она воплощается частично в ЭКЗЕПЛЯР(ы), а частично в отдельный ОБЪЕКТ КЛАССА, каким-то образом соотносящийся со всеми экземплярами этого класса:</p>
+
+<div class="diagram" style="width: 400px"><img src="images/class_inheritance.png"></img></div>
+
+<p>Штриховой линией я показал связи между сущностями, существующие только абстрактно. Хорошо, даже если сущности КЛАСС убрать из этой схемы как нечто, существующее только в исходном коде, а на этапе выполнения воплощенное в ОБЪЕКТ КЛАССА и ЭКЗЕМПЛЯРЫ, какая связь между Man class object и Person class object? Первый наследуется от второго? По логике - вроде, да. По факту - нет...</p>
+
+<p>Кроме того, сын и отец - это не просто мужчины, сын от отца хоть что-то да наследует. Например, фамилию (то есть, не только факт наличия поля Surname, а значенние этого поля). Значит придётся создать ещё один класс Pupkin, чтобы сделать его носителем наследуемой фамилии, в конструкторе класса Pupkin придётся сохранить значение "Пупкин" в поле Surname, чтобы все потомки владели им по умолчанию:</p>
+
+<div class="diagram" style="width: 400px"><img src="images/class_inheritance_2.png"></img></div>
+
+<p>К такому подходу можно привыкнуть и жить с этим - в конце-концов, тысячи программистов этим пользуются!</p>
+
+<p>Но нельзя ли как-то проще?</p>
+
+<h2 id="prototypal_inheritance" class="chapter">Идея прототипного наследования</h2>
+
+<p><b>Я считаю саму идею <a href="http://en.wikipedia.org/wiki/Prototype-based_programming">прототипного наследования</a> до гениальности простой и понятной заменой классическому наследованию.</b> Прототипное наслелование бывает двух разновидностей: 1) путём делегирования, 2) путём каскадирования (копирования, клонирования). Я буду говорить о первом (именно оно реализовано в ECMAScript). Итак, суть в следующем:</p>
+<ul>
+<li>Нет таких понятий, как КЛАСС и ЭКЗЕМПЛЯР КЛАССА (и всей, из этого вытекающей, двойственности), есть только понятие ОБЪЕКТ. Все объекты семантически одинаковы.</li>
+<li>Любой объект может ссылаться на другой объект как на ПРОТОТИП, таким образом возможна цепь прототипов.</li>
+<li>Когда на объекте зачитывается свойство "propname", оно ищется в самом объекте; если его там нет, то оно ищется в прототипе объекта и т.д. рекурсивно, пока оно либо не будет найдено, либо не будет достигнут конец цепи. Иными словами, когда объект не может ответить на сообщение самостоятельно, он обращается к своему прототипу (делегирует ему полномочия за ответ).</li>
+</ul>
+
+<p>Рассмотренная выше модель при прототипном наследовании:</p>
+
+<div class="diagram" style="width: 120px"><img src="images/prototypal_inheritance.png"></img></div>
+
+<p>Я назвал объекты Person и Man с большой буквы, чтобы было нагляднее, где в классическом наследовании использовались бы классы. Если Вам так удобнее мыслить - можете называть их "классами", но father и son ничем технически не отличаются от Man.<b> Обратите внимание на отсутствие объекта Pupkin! Его роль (носителя фамилии) выполняет father - и это ведь логично!?</b></p>
+
+<p>Мне кажется, что <b>эта модель значительно ближе к естественному человеческому мышлению</b>, чем рассмотренная ранее модель при классическом наследовании. Если случайного человека попросить изобразить графически понятия Человек, Мужчина, Отец и Сын в порядке "от общего к частному", то, скорее всего, он не станет выдумывать какие-то дополнительные сущности.</p>
+
+<h2 id="traditional_js_inheritance" class="chapter">Критика "традиционных" инструментов управления наследованием в javascript</h2>
+
+<p><b>В javascript используется делегирующее прототипное наследование. Но, к сожалению, его использование организовано так, что это отпугивает или, по крайней мере, конфузит многих программистов.</b> По этой причине многие считают, что прототипное наследование сложнее и запутаннее классического. Я утверждаю, что это не так.</p>
+
+<p>В чём проблема? Дело в том, что <b>изначально предложенный и много лет используемый способ доступа к цепи прототипов и управления ею в javascript, таков, что двойственность, описанная в разделе "Критика классического наследования" продолжает присутствовать</b>.</p>
+
+<p>Один из двух способов создания объекта в javascript - с помощью оператора new, которому в качестве операнда передаётся функция-инициализатор. Свойство prototype этой функции указывает на автоматически создаваемый объект, который будет выступать в роли прототипа для объекта-возврата оператора new:</p>
+
+<div class="code">
+<pre>
+var Person = function(name){
+  this.name = name;
+};
+
+var p1 = new Person('Vasya');
+
+<b>p1.prototype; // undefined</b>, жаль - было бы логично, чтоб свойство с именем "prototype" указывало на прототип объекта p1
+p1.constructor == Person; // true
+p1 instanceof Person; // true
+typeof p1; // "object" (мало пользы в такой информации)
+</pre>
+</div>
+
+<p>Что мы имеем (<b>зелёным цветом показана истинная цепь прототипов, всё остальное - "серый шум"</b>):</p>
+
+<div class="diagram"><img src="images/constructor_1.png"></img></div>
+
+<ul>
+    <li><b>Свойство prototype есть только у функций (объктов типа Function), и оно не имеет ничего общего с цепью прототипов того объекта, которому оно принадлежит.</b></li>
+    <li><b>Person - объект типа Function, используемый для создания объекта p1, не входит в цепь прототипов последнего.</b> Вместо Person в цепи прототипов объекта p1 присутствует объект Person.prototype, который несёт в себе свойства, наследуемые (посредством делегирования) всеми "экземплярами", создаваемыми с помощью new Person(). Итак, объект p1 получен с помощью программной конструкции <span class="code">p1 = new Person()</span>, но Person не является предком p1. Однако же <span class="code">p1 instanceof Person == true</span>!</b> То есть, с Person произошло раздвоение, как и при классическом наследовании. Person - это какой-то "полупредок" объекта p1 (и не класс, и не прототип, а просто кто-то косвенно причастный).</p>
+
+<p class="very_important">Мне это кажется противоречивым, и я бы предпочёл не иметь ТАКИХ операторов new и instanceof, и ТАКОГО свойства prototype.</p>
+
+<hr/>
+
+<p>Также есть ещё одна неприятность, связанная со свойством constructor. Из объекта p1 обращение к непосредственному его прототипу возможно через <span class="code">p1.constructor.prototype</span> (кстати, довольно-таки через околицу...). Но и это легко испортить:</p>
+
+<div class="code">
+<pre>
+var Person = function(name){
+  this.name = name;
+};
+
+<b>var Obj = {};
+Person.prototype = Obj; // автоматический ПРОТОТИП ЗАМЕНЁН на другой объект</b>
+
+var p1 = new Person('person');
+
+p1.prototype; // undefined, по-прежнему очень жаль
+p1.constructor == Person; // <b>false</b> - потому что Obj.constructor == Object (через Obj.__proto__)
+p1.__proto__.constructor == Person; // <b>false</b> (по той же причине)
+p1 instanceof Person; // true
+typeof p1; // object, по-прежнему пользы мало
+</pre>
+</div>
+
+<p>Стандартного доступа из объекта p1 к его прототипу больше нет.</p>
+
+<p>Вот полученная иерархия объектов (<b>зелёным цветом показана истинная цепь прототипов, всё остальное - &quot;серый шум&quot;</b>):</p>
+
+<div class="diagram"><img src="images/constructor_2.png"></img></div>
+
+<p>Автоматический Person.prototype заменён на Obj - p1.constructor стал указывать на Object... <span class="very_important">Я бы предпочёл не иметь ТАКОГО свойства constructor.</span></p>
+
+<p>Чтобы конструкция <span class="code">p1.constructor.prototype</span> продолжала работать по-прежнему, при замене прототипа придётся устанавливать свойство constructor вручную:</p>
+<div class="code">
+<pre>
+var Obj = { };
+Person.prototype = Obj;
+Obj.constructor = Person;
+</pre>
+</div>
+
+<p class="very_important"><b>Что я предлагаю? Предлагаю забыть оператор new, свойства constructor и prototype, а также операторы typeof и instanceof.</b></p>
+
+<h2 id="clear_prototypal_inheritance" class="chapter">Простое и понятное прототипное наследование в javascript</h2>
+
+<h3>Суть решения</h3>
+
+<p>Я хочу использовать прототипное наследование без выше рассмотренного "серого шума" и "раздвоения личностей".</p>
+
+<p>Существует свойство <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/proto">__proto__</a>. Оно не предусмотрено стандартом ECMAScript (изначально это дело рук разработчиков Mozilla, на данный момент оно работает в Firefox, Safari, Chrome - не знаю, начиная с каких версий), поэтому я не предлагаю его использовать, хотя его использование даёт максимум гибкости и компактности кода. Сейчас я буду использовать это свойство только лишь чтобы продемонстрировать суть решения:</p>
+
+<div class="code">
+<pre>
+<b>var Person = {
+ name: 'Abstract person',
+ ancestorCount: function(){
+   return (this.__proto__ && this.__proto__.ancestorCount) ? this.__proto__.ancestorCount() + 1 : 0;
+ }
+};
+
+var Man = {
+  <span class="very_important">__proto__: Person</span>,
+  name: 'Abstract man'
+};
+
+var father = {
+  <span class="very_important">__proto__: Man</span>,
+  name: 'Father'
+};
+
+var son = {
+  <span class="very_important">__proto__: father</span>,
+  name: 'Son'
+};
+</b>
+
+// Посмотрим, что получилось
+
+Person.test = function(){
+  console.info('My name is: ', this.name);
+  console.info('ancestorCount: ', this.ancestorCount());
+  console.info('Person is my ancestor: ', Person.isPrototypeOf(this));
+  console.info('Man is my ancestor: ', Man.isPrototypeOf(this));
+  console.info('father is my ancestor: ', father.isPrototypeOf(this));
+  console.info('My immediate parent:', Object.getPrototypeOf(this));
+  console.info('***************');
+};
+
+Person.test();
+Man.test();
+father.test();
+son.test();
+</pre>
+</div>
+
+<p><b>С помощью свойства __proto__ организован однонаправленный связный список - и ничего более не требуется!</b></p>
+
+Вот полученная иерархия объектов (<b>зелёным цветом показана истинная цепь прототипов, серого шума нет<sup>*</sup></b>):
+
+<div id="__proto__" class="diagram" style="width:240px"><img src="images/proto.png"></img></div>
+
+<p>Person - это прототип для Man, Man - прототип для father, father - прототип для son, и нет никаких отдельно стоящих, косвенно причастных объектов. Такое положение вещей кажется мне легко понятным и непротиворечивым.</p>
+
+<p><sup>*</sup>Если не хотите, чтобы предком  Person был Object.prototype, нужно просто присвоить null свойству Person.__proto__:</p>
+<div class="code">
+<pre>
+var Person = {
+ __proto__: null,
+ name: 'Abstract person',
+ ...
+};
+</pre>
+</div>
+
+<b>
+<div class="very_important">
+<p>Чем мне нравится такой подход:</p>
+<ol>
+<li>Никаких магических функций, передаваемых оператору new, которые играют противоречивую роль в дальнейшей жизни созданного этим оператором объекта.</li>
+<li>Полноценный доступ к цепи прототипов - по прямой ссылке, а не через мутирующий constructor.</li>
+</ol>
+</b>
+</div>
+
+</p>Было бы неплохо, чтобы выражение <span class="code">p1 instanceof Person</span> возвращало true - ведь это логично? Но <a href="#try_to_deceive_instanceof">я не нашёл способа сделать это.</a></p>
+
+<p>Отлично, но свойство __proto__ нестандартизированное. Базировать свою программу на том, чего может не стать без предупреждения, не очень-то хорошо.</p>
+
+<h3>Стандартизированный способ - Object.create()</h3>
+
+<p>В <a href="http://kangax.github.com/es5-compat-table/">браузерах, реализующих стандарт ECMAScript 5th Edition (JavaScript 1.8.5, далее - ES5)</a>, есть метод <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/create">Object.create</a>. Это единственный стандартный способ присвоить прототип объекту, не используя оператор new. Используя этот способ, можно строить цепь прототипов без побочных сущностей, как это было сделано выше при непосредственном использовании свойтсва __proto__.</p>
+<p><b>Метод Object.create создаёт и возвращает новый объект, делая его прототипом свой первый параметр.</b> Таким образом, присвоить прототип объекту можно только при его создании (как и в случае использования оператора new). Во время жизни объекта нет возможности заменить ему прототип (вдруг превратить сына в брата), о чём, наверное, немногие пожалеют, а кто-то даже порадуется. Но, вообще-то, возможность замены прототипа во время жизни объекта считается важной характеристикой в теории прототипного наследования.</p>
+
+<p>Выше приведенная программа с использованием метода Object.create будет выглядеть вот так:</p>
+
+<div class="code" id="first_using_Object_create">
+<pre>
+<b>var Person = {
+ name: 'Abstract person',
+ ancestorCount: function(){
+   return (this.__proto__ && this.__proto__.ancestorCount) ? this.__proto__.ancestorCount() + 1 : 0;
+ }
+};
+
+var Man = Object.create(Person);
+Man.name = 'Abstract man';
+
+var father = Object.create(Man);
+father.name = 'Father';
+
+var son = Object.create(father);
+son.name = 'Son';
+</b>
+
+// Посмотрим, что получилось
+
+Person.test = function(){
+  console.info('My name is: ', this.name);
+  console.info('ancestorCount: ', this.ancestorCount());
+  console.info('Person is my ancestor: ', Person.isPrototypeOf(this));
+  console.info('Man is my ancestor: ', Man.isPrototypeOf(this));
+  console.info('father is my ancestor: ', father.isPrototypeOf(this));
+  console.info('My immediate parent:', Object.getPrototypeOf(this));
+  console.info('***************');
+};
+
+Person.test();
+Man.test();
+father.test();
+son.test();
+</pre>
+</div>
+
+<p>Результат тот же (см. <a href="#__proto__">схему при использовании свойства __proto__</a>).</p>
+
+<p><b>В сравнении с "традиционным" способом создания объекта через конструктор, последний вариант программы, во-первых, является более "чистым" семантически</b> (то есть, не порождает лишних сущностей, чётко соответствует идее прототирного наследования), <b>во-вторых, просто компактнее и интуитивно понятнее</b> (я сейчас опускаю все свойства, чтобы максимально упростить программу и сосредоточиться только лишь на коде построения иерархии наследования):</p>
+
+<div class="code">
+  <table class="comparison">
+    <tr>
+      <th>Вариант 1<br/>(создание объектов с помощью оператора new)</th>
+      <th>Вариант 2<br/>(создание объектов с помощью метода Object.create)</th>
+    </tr>
+    <tr>
+      <td>
+<pre>
+Person = function(){};
+
+Man = function(){};
+Man.prototype = new Person();
+
+Father = function(){};
+Father.prototype = new Man();
+father = new Father();
+
+Son = function(){};
+Son.prototype = new Father();
+son = new Son();
+</pre>
+      </td>
+      <td>
+<pre>
+Person = {};
+
+Man = Object.create(Person);
+
+
+father = Object.create(Man);
+
+
+
+son = Object.create(father);
+</pre>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+<p>На мой взгляд, Вариант 2 даже внешне выглядит привлекательнее.</p>
+
+<p><b>Но есть две небольших неприятности.</b></p>
+<p><b>1) Метод Object.create отсутствует <a href="http://kangax.github.com/es5-compat-table/">браузерах, не реализующих стандарт ES5.</a></b> Для решения этой проблемы <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/create">предлагается</a> использовать вот такой "путь для отступления":</p>
+
+<div class="code">
+<pre>
+if (!Object.create) {
+    Object.create = function (proto) {
+        if (arguments.length > 1) {
+            throw new Error('Object.create implementation only accepts the first parameter.');
+        }
+        <b>function F() {}
+        F.prototype = proto;
+        return new F();</b>
+    };
+}
+</pre>
+</div>
+
+<p>Это упрощённая реализация метода Object.create, она принимает только один параметр - прототип создаваемого объекта. Разумеется, можно реализовать и более полную версию.</p>
+
+<p>Исходный код клиентской программы останется таким же. Использование такого метода Object.create породит "серый шум", от которого я избавлялся на протяжении всей статьи (а именно - объект F), но, всё-таки, Man будет предком объекта father, а не "каким-то странным родственником":</p>
+
+<div class="diagram" style="width:800px"><img src="images/prototypal_inheritance_for_old_browser.png"></img></div>
+
+<p>2) В выше приведенном <a href="#first_using_Object_create">примере программы с использовани Object.create</a> <b>свойства присваиваются объекту императивно после его создания.</b> Такой стиль лично мне не очень нравится, я предпочитаю JSON. Вторым параметром методу Object.create можно передать все необходимые свойства, но ради гибкости <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/defineProperty">структура этого объекта довольно громоздкая</a>. Для того, чтобы создать объект obj и проинициализировать его "привычными" writable и enumerable свойствами (называемыми "ECMAScript 3 property") name, age и weight, нужно написать вот такой код:</p>
+
+<div class="code">
+<pre>
+obj = Object.create(Man, {
+  name: { value: 'Vasya', writable: true, enumerable: true },
+  age: { value: 25, writable: true, enumerable: true },
+  weight: { value: 80, writable: true, enumerable: true }
+});
+</pre>
+</div>
+
+<p>Жить можно, но приятного мало. Можно скрыть лишнюю сложность, например, так:</p>
+<div class="code">
+<pre>
+Object.spawn = function(proto, <b>properties</b>){
+  var o;
+
+  if(Object.create){ // ES5
+    o = Object.create(proto);
+  } else { // ES3
+    function F() {}
+    F.prototype = proto;
+    o = new F();
+  }
+<b>
+  for(p in properties){
+    if(properties.hasOwnProperty(p)){
+      o[p] = properties[p];
+    }
+  }
+</b>
+  return o;
+};
+</pre>
+</div>
+
+<p>Теперь прикладной код выглядит проще:</p>
+
+<div class="code">
+<pre>
+<b>obj = Object.spawn(Man, { name: 'Vasya', age: 25, weight: 80 });</b>
+</pre>
+</div>
+
+<p>То есть, метод Object.spawn (предлагается как заменитель метода Object.create) - это синтаксический сахар для простых случаев, когда не требуется особого конфигурирования свойств.</p>
+
+<p>А можно ещё слаще:</p>
+
+<div class="code">
+<pre>
+Object.prototype.spawn = function(properties){
+  return Object.spawn(this, properties);
+};
+
+// или, если не хотите трогать Object.prototype (я же предлагал забыть о свойстве prototype совсем):
+
+Person.spawn = function(properties){
+  return Object.spawn(this, properties);
+};
+</pre>
+</div>
+
+<p>Теперь прикладной код может выглядеть так:</p>
+
+<div class="code">
+<pre>
+<b>obj = Man.spawn({ name: 'Vasya', age: 25, weight: 80 });</b>
+</pre>
+</div>
+
+<p>В общем, бросайте сахара столько ложечек, сколько Вам угодно - javascript позволяет это делать легко и просто.</p>
+
+
+<h2 id="conclusion" class="chapter">Заключение</h2>
+
+<p>Итак, цель достигнута:</p>
+
+<div class="diagram" style="width: 700px"><img src="images/proto-simplest.png"></img></div>
+
+<ol>
+  <li>Построение иерархии объектов выглядит очень просто:
+<div class="code">
+<pre>
+var Person = { name: 'Abstract person' };
+var Man    = Person.spawn({ name: 'Abstract man' });
+var father = Man.spawn({ name: 'Father' });
+var son    = father.spawn({ name: 'Son' });
+</pre>
+</div>
+  </li>
+  <li>Объект, на котором вызван метод spawn, это истинный предок объекта, возврашаемого методом (то есть, он используется интерпретатором javascript при поиске свойств). Из любого объекта непосредственный его прототип доступен c помощью метода Object.getPrototypeOf():
+<div class="code">
+<pre>
+Object.getPrototypeOf(son) == father; // true
+</pre>
+</div>
+Можно слаще:
+<div class="code">
+<pre>
+Object.prototype.parent = function(){
+  return Object.getPrototypeOf(this);
+};
+son.parent().parent() == Man; // true
+</pre>
+</div>
+  Пишите, на здоровье, свои "виртуальные методы", не терзаясь догадками, как получить доступ к объекту-предку.
+  </li>
+</ol>
+
+<p><b>Резюме сути предложенного:</b></p>
+
+<div class="code">
+  <table class="comparison">
+    <tr>
+      <th>Забыть</th>
+      <th>Использовать</th>
+    </tr>
+    <tr>
+      <td>
+Оператор new
+      </td>
+      <td>
+Метод Object.create
+      </td>
+    </tr>
+    <tr>
+      <td>
+Свойства constructor и prototype, оператор typeof
+      </td>
+      <td>
+Метод Object.getPrototypeOf
+      </td>
+    </tr>
+    <tr>
+      <td>
+Оператор instanceof
+      </td>
+      <td>
+Метод Object.isPrototypeOf
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+
+
+<h2 id="open_issues" class="chapter">Вопросы, оставшиеся "за бортом"</h2>
+
+<h3 id="not_inheritable_properties">Ненаследуемые свойства</h2>
+
+<p>В предлагаемом подходе наследуются ВСЕ свойства, что, в общем случае, может быть нежелательно. Это логично, что сын наследует от отца фамилию. Но, наверное, нелогично, если он будет наследовать имя или вес.</p>
+
+<p>Я предлагаю решение, суть которого - для всех ненаследуемых свойств обеспечить в потомках присутствие этого свойства со значением null (или undefined?). Об этом будет в другой статье.</p>
+
+<h3 id="multiple_inheritance">Множественное наследование</h3>
+
+<p>Сын является объектом, производным не только от отца, но и от матери. Он наследует фамилию от отца (по умолчанию) в силу патриархата. Но он вполне может наследовать цвет волос от матери. Или же сын, наследуя какие-то физиологические характеристики от отца, в то же время, является программистом, а значит наследует какие-то характеристики, общие для всех программистов. Вы можете придумать сколько угодно куда более удачных примеров, когда множественное наследование (или использование примесей) уместно.</p>
+
+<p>К сожалению, в javascript нет встроенной поддержки множественного наследования. О том, как с этим быть, я попробую порассуждать в другой статье.</p>
+
+
+<h2 id="afterword" class="chapter">Послесловие</h2>
+
+<p>Существует много решений, позволяющих писать код примерно такой же компактности, как предложил я. Например: <a href="http://www.kevlindev.com/tutorials/javascript/inheritance/index.htm">KevLinDev Inheritance</a>, <a href="http://api.prototypejs.org/language/Class/">Prototype.Class</a>, <a href="http://base2.googlecode.com/svn/version/1.0.2/doc/base2.html#/doc/!base2.Base">base2</a>, <a href="http://ejohn.org/blog/simple-javascript-inheritance/">Simple JavaScript Inheritance by John Resig</a>, <a href="http://jupiterjs.com/news/a-simple-powerful-lightweight-class-for-jquery">jQuery.Class</a>. <b>Если они и схожи с тем, что предлагаю я, то только по степени компактности.</b> Но по сути своей упомянутые решения эмулируют классическое наследование (их так и называют -  "classical-inheritance-simulating techniques" или "class-like systems"), а я предлагаю мыслить исключительно прототипами, избавившись от "серого шума".</p>
+
+<hr/>
+
+<p>Очевидно, я не вещаю непоколебимую истину. Я просто изложил мои представления об ООП без лишней сложности и путаницы.</p>
+<p>Отзывы и замечания можно присылать на адрес <a href="mailto:sergey.ischenko.78@gamil.com?subject=clear_prototype_inheritance">sergey.ischenko.78@gmail.com</a></p>
+
+<hr/>
+
+<p>Изображения, представленные в статье, не идеальны, но в них интересно то, что они сделаны с помощью очень простого в использовании <a href="http://yuml.me/diagram/scruffy/class/draw2">онлайн-инструмента</a> для создания UML-диаграмм. Вот пример исходного кода м полученной картинки:</p>
+
+<div class="code">
+<pre>
+[Person{bg:green}]<-__proto__[Man{bg:green}]
+[Man]<-__proto__[father{bg:green}]
+[father]<-__proto__[son{bg:green}]
+</pre>
+</div>
+
+<div class="diagram" style="width: 700px"><img src="images/proto-simplest.png"></img></div>
+
+
+<h2 id="appendix" class="chapter">Приложение</h2>
+
+<p>Сюда, с целью разгрузки основного тела статьи, вынесена информация, имеющая второстепенное значение; статья содержит соответствующие ссылки.</p>
+
+<h3 id="static_members_via_class_object">Доступ к статическим членам через явный "объект класса" (пример на языке C#)</h3>
+<div class="code">
+<pre>
+using System;
+using System.Reflection;
+
+class A {
+
+  public static int test(){ return 5; }
+  public static string f = "asdf";
+
+  public static void Main(){
+    A a = new A();        // a - instance of class A
+    Type c = a.GetType(); // c - "Class object" of class A
+
+    int i = (int)c.InvokeMember("test", BindingFlags.Default | BindingFlags.InvokeMethod, null, null, new object[] { });
+    Console.WriteLine(i); // 5
+
+    string s = (string)c.InvokeMember("f", BindingFlags.Default | BindingFlags.GetField, null, null, new object[] { });
+    Console.WriteLine(s); // asdf
+  }
+
+}
+</pre>
+</div>
+
+<h3 id="try_to_deceive_instanceof">Попытка обмануть оператор instanceof</h3>
+
+<p>Оператор instanceof возвращает true, если в цепи прототипов первого операнда есть объект, на который указывает свойство prototype второго операнда. Попробую обмануть instanceof:</p>
+
+<div class="code">
+<pre>
+var Person = {
+  name: 'Abstract person',
+  <b>prototype: this</b> // чтоб instanceof моего истинного потомка возвращал true
+};
+
+var p1 = {
+  __proto__: Person,
+  name: 'Test person'
+};
+
+p1 instanceof Person; // TypeError: invalid 'instanceof' operand Person
+</pre>
+</div> Тьфу! Вторым операндом оператора instanceof должен быть именно объект типа Function, а не любой объект, prototype которого присутствует в цепи прототипов объекта p1. Единственный выход - вместо неправильного операторора instanceof использовать метод Object.isInstanceOf.</p>
+
+<h3 id="Object_getPrototypeOf">Object.getPrototypeOf</h3>
+
+<p>В браузерах, не реализующих стандарт ECMAScript 5th Edition, метода Object.getPrototypeOf нет. Эту проблему можно решить <a href="http://ejohn.org/blog/objectgetprototypeof/">следующим образом</a>:</p>
+<div class="code">
+<pre>
+if ( typeof Object.getPrototypeOf !== "function" ) {
+  if ( typeof "test".__proto__ === "object" ) {
+    Object.getPrototypeOf = function(object){
+      return object.__proto__;
+    };
+  } else {
+    Object.getPrototypeOf = function(object){
+      // May break if the constructor has been tampered with
+      return object.constructor.prototype;
+    };
+  }
+}
+</pre>
+</div>
+
+
+<div id="chapter_index">
+  <div id="list"></div>
+  <div id="label">содержание</div>
+</div>
+
+
+<script language="javascript" src="jquery-1.7.1.min.js"></script>
+<script language="javascript" src="clear_prototipal_inheritance.js"></script>
+
+<hr id='separator_before_comments'/>
+
+<script>
+// This code goes ABOVE the main HTML Comment Box code!
+// replace the text in the single quotes below to customize labels.
+hcb_user = {
+    //L10N
+    comments_header : 'Комментарии',
+    name_label : 'Ваше имя',
+    content_label: 'введите Ваш комментарий сюда',
+    submit : 'отправить',
+    logout_link : '<img src="http://www.htmlcommentbox.com/static/images/door_out.png" alt="[logout]" class="hcb-icon"/>',
+    admin_link : '<img src="http://www.htmlcommentbox.com/static/images/door_in.png" alt="[login]" class="hcb-icon"/>',
+    no_comments_msg: '<p>Нет комментариев. Ваш будет первым!</p>',
+    add: '(+) Добавить',
+    rss: '<img src="http://www.htmlcommentbox.com/static/images/feed.png" class="hcb-icon" alt="rss"/> ',
+    said: 'сказал:',
+    prev_page:'<img src="http://www.htmlcommentbox.com/static/images/arrow_left.png" class="hcb-icon" alt="[prev]"/>',
+    next_page:'<img src="http://www.htmlcommentbox.com/static/images/arrow_right.png" class="hcb-icon" alt="[next]"/>',
+    showing:'showing',
+    to:'to',
+    website_label:'website (optional)',
+    email_label:'email',
+    anonymous:'Аноним',
+    mod_label:'(mod)',
+    subscribe:'email me replies',
+
+    msg_thankyou:'<b>Спасибо за Ваш комментарий!</b>',
+    msg_approval:'(этот комеентарий не будет опубликован, пока Вы не подтвердите его)',
+    msg_approval_required:'<b>Спасибо за Ваш комментарий! Ваш комментарий появится, как только модератор подтвердит его.</b>',
+
+    err_bad_html:'Ваш комментарий содержит плохой html.',
+    err_bad_email:'Введите валидный email-адрес.',
+    err_too_frequent:'Вы должны подождать несеолько секунд перед созданием следующего комментария.',
+    err_comment_empty:'Ваш комментарий не отправлен, так как он пустой!',
+
+    //SETTINGS
+    MAX_CHARS: 2048,
+    PAGE:'', // ID of the webpage to show comments for. defaults to the webpage the user is currently visiting.
+    RELATIVE_DATES:true // show dates in the form "X hours ago." etc.
+};
+</script>
+<!-- done customizing labels of htmlcommentbox.com -->
+
+<!-- begin htmlcommentbox.com -->
+ <div id="HCB_comment_box"><a href="http://www.htmlcommentbox.com">HTML Comment Box</a> is loading comments...</div>
+ <link rel="stylesheet" type="text/css" href="http://www.htmlcommentbox.com/static/skins/simple/skin.css" />
+ <script type="text/javascript" language="javascript" id="hcb"> /*<!--*/ if(!window.hcb_user){hcb_user={  };} (function(){s=document.createElement("script");s.setAttribute("type","text/javascript");s.setAttribute("src", "http://www.htmlcommentbox.com/jread?page="+escape((window.hcb_user && hcb_user.PAGE)||(""+window.location)).replace("+","%2B")+"&mod=%241%24wq1rdBcg%24UXtUoztwKe2QOygQZiQFV/"+"&opts=0&num=10");if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})(); /*-->*/ </script>
+<!-- end htmlcommentbox.com -->
+
+</body>

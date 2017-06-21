@@ -1,0 +1,24 @@
+<html>
+    <body>
+
+
+<h3>Would you like to be able to MAKE A HYPERLINK TO ANY TEXT ON A PAGE?</h3>
+
+<br/>Currently you are able to refer to a portion of a web page only by either an anchor or an element id/name attribute. Often it's impossible to refer even to a visually separate chapter (section), because it's not marked properly by the page author.
+
+<br/><b>Here are two bookmarklets allowing you to <u>save or share a link to an arbitrary phrase on a page</u> so that later it will be possible to open the link and see exactly the referred place shown and selected.</b>
+
+<br/><br/>
+With <a title="Make a Precise Link to the cusror (selection) position on this page." 
+href="javascript:(function()%7Bvar%20txt%3D%22%22%2B(window.getSelection%3Fwindow.getSelection()%3Adocument.getSelection%3Fdocument.getSelection()%3Adocument.selection.createRange().text)%3Btxt%3Dtxt.replace(%2F%5Cr%5Cn%7C%5Cr%7C%5Cn%2Fg%2C%22%20%2C%22)%3Bif(!txt)%7Btxt%3Dalert(%22Select%20the%20text%20you%20want%20to%20refer%20to!%22%2C%22%22)%3Breturn%3B%7Dif(txt!%3Dnull)%7Bprompt(%22The%20link%20is%20ready!%20Copy%20and%20use%20it%3A%22%2C%20document.location%2B%22%23href-to-text%3D%22%2BencodeURIComponent(txt))%3B%7D%7D)()" style="grab">Make Precise Link</a> 
+bookmarket (drag and drop it now into bookmarks in your browser) you can visit any site, select some text (the text should be as possible unique in the scope of the page), click "Make Precise Link" bookmark, copy the hyperlink from the appeared pop-up, save or share the hyperlink.
+
+<br/><br/>
+With <a title="Show the place the Precise Link in address bar points to." 
+href="javascript:(function()%7Bvar%20txt%3Ddocument.location.hash.match(%2Fhref-to-text%3D(.%2B)%2F)%3Bif(txt)%7Bfind(decodeURIComponent(txt%5B1%5D))%3B%7Delse%7Balert(%22There%20is%20no%20Precise%20Link%20in%20the%20page%20address!%22)%7D%7D)();">Resolve Precise Link</a> 
+bookmarklet (drag and drop it now into bookmarks in your browser), when you follow a link made with "Make Precise Link" bookmarklet, you can click "Resolve Precise Link" bookmark - the referred text will be selected and the page will scroll (if necessary) so that the text become visible.
+
+
+
+    </body>
+</html>
