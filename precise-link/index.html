@@ -39,11 +39,11 @@
   <body>
 
 <div id="current-precise-link-instruction" class="how-to-use">
-<h4>You see this page because <b>you are following a specially wrapped precise link</b>. This page explains how to deal with it.
+<h4>You see this page because <b>you are following a precise link (a link to a certain text on a page)</b> specially wrapped so that you visit this page and become aware of the link specifics.
 <br/>Now you have a choice:</h4>
 <ol>
   <li>Just to visit <script>document.write("<a href=" + decodeURIComponent(window.location.hash.match(/the-precise-link=(.*)/)[1]) + " style='cursor:pointer'>the linked page<a>")</script>.</li>
-  <li>To visit exactly the linked place on that page. For this you should use "Resolve Precise Link" bookmarklet. See the explanation below.</li>
+  <li>To visit exactly the linked place on that page. For this you should use "Resolve Precise Link" bookmarklet - see the explanation below.</li>
 </ol>
 </div>
 
@@ -55,10 +55,10 @@
 
 <center><h2>Would you like to be able to MAKE A HYPERLINK TO ANY TEXT ON A PAGE?</h2></center>
 
-<br/>Currently browsers can resolve a reference to a specific place of a web page (by a "fragment identifier" in a URL). To exploit this feature the page author must provide a special mark (either an anchor tag or an element id/name attribute) at the corresponding place of the page and you must know how to refer to that place (whta's to often not trivial even if a page really contains te mentioned marks - unless the marks are obviously shown to you with a hand/anchor/chain image etc.).
-<br/>Regardless to "anchors" maybe provided (mostly and in a common case - not) by a page author you may want to link to an arbitrary part of the page.
+<br/>Currently browsers can resolve a reference to a certain place on a web page (by a "fragment identifier" in a URL). To exploit this feature the page author must provide a special mark at a certain place on a page and you must know how to use the mark to refer to that place. Often even if a page really contains such marks, it's not easy to find them (unless they are obviously shown to you with a hand/anchor/chain image etc.).
+<br/>But what if you want to refer to an arbitrary part of the page, not marked anyhow?
 
-<h3>Here are two very simple bookmarklets allowing you to <u>save or share a link to an arbitrary phrase on a page</u> so that later it will be possible <u>to open the link and to see exactly the referred place shown and selected</u>.</h3>
+<h3>Here are two very simple bookmarklets allowing you <u>to make a link to a certain text on a page</u> (a so named "precise link"), save or share it and later <u>to open the link and see exactly the referred text shown and selected</u>.</h3>
 
 <div class="how-to-use">
 
@@ -66,11 +66,11 @@
 
 <ol>
 
-  <li>To make a precise link: drag and drop <a title="Make a Precise Link to the cusror (selection) position on this page."
+  <li>To make precise links: drag and drop <a title="Make a Precise Link to the cusror (selection) position on this page."
   href="javascript:(function()%7Bvar%20txt%3D%22%22%2B(window.getSelection%3Fwindow.getSelection()%3Adocument.getSelection%3Fdocument.getSelection()%3Adocument.selection.createRange().text)%3Btxt%3Dtxt.replace(%2F%5Cr%5Cn%7C%5Cr%7C%5Cn%2Fg%2C%22%20%2C%22)%3Bif(!txt)%7Btxt%3Dalert(%22Select%20the%20text%20you%20want%20to%20refer%20to!%22%2C%22%22)%3Breturn%3B%7Dif(txt!%3Dnull)%7Bprompt(%22The%20link%20is%20ready!%20Copy%20and%20use%20it%3A%22%2C%20document.location%2B%22%23href-to-text%3D%22%2BencodeURIComponent(txt))%3B%7D%7D)()" style="grab">Make Precise Link</a> bookmarket into bookmarks in your browser. <span class="extra-note">
-  <br/>Alternatively, if you want to share a precise link with a not prepared people, you can use <a href="javascript:(function()%7Bvar%20txt%3D%22%22%2B(window.getSelection%3Fwindow.getSelection()%3Adocument.getSelection%3Fdocument.getSelection()%3Adocument.selection.createRange().text)%3Btxt%3Dtxt.replace(%2F%5Cr%5Cn%7C%5Cr%7C%5Cn%2Fg%2C%22%20%2C%22)%3Bif(!txt)%7Btxt%3Dalert(%22Select%20the%20text%20you%20want%20to%20refer%20to!%22%2C%22%22)%3Breturn%3B%7Dif(txt!%3Dnull)%7Bvar%20preciseLink%3Ddocument.location%2B%22%23href-to-text%3D%22%2BencodeURIComponent(txt)%3Bvar%20wrappedPreciseLink%3D%22http%3A%2F%2Fsianahoret.github.io%2Fprecise-link%23the-precise-link%3D%22%2BencodeURIComponent(preciseLink)%3Bprompt(%22The%20link%20is%20ready!%20Copy%20and%20use%20it%3A%22%2CwrappedPreciseLink)%3B%7D%7D)()">Make Self-explained Precise Link</a>. In case of the latter bookmarklet use, a precise link will be wrapped in such a way that when you share it with somebody, the addressee will not need to know anything about a "precise link", because he will be first forwarded to a special page with the necessary explanation.</span></li>
+  <br/>Alternatively, if you want to share a precise link with not prepared people, you can use <a href="javascript:(function()%7Bvar%20txt%3D%22%22%2B(window.getSelection%3Fwindow.getSelection()%3Adocument.getSelection%3Fdocument.getSelection()%3Adocument.selection.createRange().text)%3Btxt%3Dtxt.replace(%2F%5Cr%5Cn%7C%5Cr%7C%5Cn%2Fg%2C%22%20%2C%22)%3Bif(!txt)%7Btxt%3Dalert(%22Select%20the%20text%20you%20want%20to%20refer%20to!%22%2C%22%22)%3Breturn%3B%7Dif(txt!%3Dnull)%7Bvar%20preciseLink%3Ddocument.location%2B%22%23href-to-text%3D%22%2BencodeURIComponent(txt)%3Bvar%20wrappedPreciseLink%3D%22http%3A%2F%2Fsianahoret.github.io%2Fprecise-link%23the-precise-link%3D%22%2BencodeURIComponent(preciseLink)%3Bprompt(%22The%20link%20is%20ready!%20Copy%20and%20use%20it%3A%22%2CwrappedPreciseLink)%3B%7D%7D)()">Make Self-explained Precise Link</a>. This bookmarklet wraps a precise link in such a way that when you share it with somebody, the addressee will not need to know that this link is "precise" and what to do to resolve the link - he will be forwarded to an intermediate page containing necessary explanation.</span></li>
 
-  <li>To resolve a precise link: drag and drop <a title="Show the place the Precise Link in address bar points to."
+  <li>To resolve precise links: drag and drop <a title="Show the place the Precise Link in address bar points to."
 href="javascript:(function()%7Bvar%20txt%3Ddocument.location.hash.match(%2Fhref-to-text%3D(.%2B)%2F)%3Bif(txt)%7Bfind(decodeURIComponent(txt%5B1%5D))%3B%7Delse%7Balert(%22There%20is%20no%20Precise%20Link%20in%20the%20page%20address!%22)%7D%7D)();">Resolve Precise Link</a> bookmarklet into bookmarks in your browser.</li>
 
   <li>Use the bookmarks as shown on the picture below:</li>
