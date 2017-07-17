@@ -44,7 +44,7 @@
 <h4>You see this page because <b>you are following a precise link (a link to a certain text on a page)</b> specially wrapped so that you visit this page and become aware of the link specifics.
 <br/>Now you have a choice:</h4>
 <ol>
-  <li>Just to visit <script>document.write("<a href=" + decodeURIComponent(window.location.hash.match(/the-precise-link=(.*)/)[1]) + " style='cursor:pointer'>the linked page<a>")</script>.</li>
+  <li>Just to visit <script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>the linked page<a>")}</script>.</li>
   <li>To visit exactly the linked place on that page. For this you should use "Resolve Precise Link" bookmarklet - see the explanation below.</li>
 </ol>
 </div>
