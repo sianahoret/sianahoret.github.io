@@ -11,12 +11,33 @@
         background-color: #F2F2F2;
       }
 
+      ol {
+        list-style-type: decimal;
+      }
+
       ol li {
         font-size: 1.3em;
       }
 
       li a {
         cursor: alias;
+      }
+
+      ol.choice {
+        list-style-type: disc;
+        line-height: 1.8em;
+      }
+
+      ol.choice li li {
+        font-size: 1em;
+      }
+
+      ol.choice li a {
+        cursor: pointer;
+      }
+
+      .emphasis {
+        font-size: 1.2em;
       }
 
       .extra-note {
@@ -42,12 +63,20 @@
   <body>
 
 <div id="current-precise-link-instruction" class="how-to-use">
-<h4>You see this page because you are following <u>a precise link (a link to a certain text on a page)</u> specially wrapped so that you visit this page and become aware of the link specifics.
-<br/><br/>Now you have a choice:
+
+<h3>WARNING! YOU ARE NOT ON THE TARGET PAGE YET. Plese read the instructions on this yellow background.</h3>
+
+<h4>You see this page because <u>you are following a precise link (a link to a certain text on some page)</u> specially wrapped so that you visit this page and become aware of the link specifics.
+<br/><br/><span class="emphasis">You have a choice for what to do now:</span>
 </h4>
-<ol>
-  <li>Just to <script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>visit the target page</a>")}</script> (ignoring the precisely referred place on it).</li>
-  <li><b>To visit exactly the referred place (a text phrase).</b> For this you should (only once) save "Resolve Precise Link" bookmark in your browser, then (as many times as you want) follow a precise link and then use the bookmark - see the explanation below.</li>
+<ol class="choice">
+  <li>Just to <script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>visit the target page</a>")}</script> (ignoring the precisely referred text on it).</li>
+  <li><b>To visit exactly the referred place (a text phrase).</b> For this you should:
+  <ol>
+    <li>Save "Resolve Precise Link" bookmark in your browser (unless you did it before).</li>
+    <li><script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>Visit the target page</a>")}</script> and then click the bookmark.</li>
+  </ol>
+  There is a detailed explanation below.
 </ol>
 </div>
 
