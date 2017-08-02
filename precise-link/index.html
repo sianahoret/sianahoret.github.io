@@ -11,10 +11,6 @@
         background-color: #F2F2F2;
       }
 
-      .emphasis {
-        font-size: 1.3em;
-      }
-
       .extra-note {
         font-size: 0.8em;
         color: #067;
@@ -61,6 +57,7 @@
       }
 
       .onfly-instructions {
+        font-size: 1.1em;
         display: none;
         color: #c00;
         background-color: #fcffcf;
@@ -72,21 +69,15 @@
 
 <div id="current-precise-link-instruction" class="onfly-instructions">
 
-<h3>WARNING! YOU ARE NOT ON THE TARGET PAGE YET. Plese read the instructions on this yellow background.</h3>
+<h3>WARNING! YOU ARE NOT ON THE TARGET PAGE YET.</h3>
 
-<h4>You see this page because <u>you are following a precise link (a link to a certain text on some page)</u> specially wrapped so that you visit this page and become aware of the link specifics.
+<p>You see this page because <u>you are following a precise link (a link to a certain text on some page)</u> specially wrapped so that you visit this page and become aware of the link specifics.</p>
 
-<br/><br/><span class="emphasis">Now you can either:</span>
-</h4>
-<ol class="choice">
-  <li><b>Visit exactly the referred place (a text phrase).</b> For this you should:
-    <ol>
-      <li>Save "Resolve Precise Link" bookmark in your browser (unless you did it before).</li>
-      <li><script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>Visit the target page</a>")}</script> and then click the bookmark. There is a detailed explanation below.</li>
-    </ol>
-    </li>
-    <li>Just <script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>visit the target page</a>")}</script> (you will see the page, but will not see what the text was precisely referred on it).</li>
-</ol>
+<b>If you have "Resolve Precise Link" bookmark in your browser</b>, <script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>visit the target page</a>")}</script> and then click the bookmark.
+<br/><br/>If you don't - you're proposed to save the bookmark to use it now and in the future.
+
+<br/><br/>There is a detailed explanation below.
+
 </div>
 
 <script>
