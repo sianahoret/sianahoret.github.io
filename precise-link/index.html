@@ -11,11 +11,6 @@
         background-color: #F2F2F2;
       }
 
-      .extra-note {
-        font-size: 0.8em;
-        color: #067;
-      }
-
       ol {
         list-style-type: decimal;
       }
@@ -60,6 +55,11 @@
         font-weight: bold;
       }
 
+      .extra-note {
+        font-size: 0.8em;
+        color: #067;
+      }
+
       .onfly-instructions {
         font-size: 1.1em;
         display: none;
@@ -68,6 +68,11 @@
         padding: 1.5em;
         box-shadow: 0 0.4em 1em 2px grey;
         border-radius: 10px;
+      }
+
+      .onfly-instructions .main-link {
+        font-size: 1.2em;
+        text-shadow: 1px 1px 1px #444, -1px -1px 1px #fff;
       }
 
       .onfly-instructions .alternate {
@@ -80,7 +85,7 @@
         border-radius: 10px;
       }
 
-      .alternate:hover {
+      .onfly-instructions .alternate:hover {
         background-color: yellow;
       }
 
@@ -115,7 +120,7 @@
   <div class="alternate">
     <div class="thumb"></div>
 
-    <span class="emphasis">If you have "Resolve Precise Link" bookmark in your browser</span>, <script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer'>follow the precise link</a>")}</script> and then click the bookmark.
+    <span class="emphasis">If you have "Resolve Precise Link" bookmark in your browser</span>, <span class="main-link"><script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer;'>follow the precise link</a>")}</script> and then click the bookmark</span>.
     <br/><br/>If you don't - you are proposed to save the bookmark in your browser to use it now and in the future.
 
     <br/><br/>There is a detailed explanation below.
