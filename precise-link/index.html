@@ -124,7 +124,7 @@
 
     <span><i>You wish to use the "Precise Link" feature</i></span><br/><br/>
     <span class="emphasis">If you have "Resolve Precise Link" bookmark in your browser</span>, <span class="main-link"><script>var match = window.location.hash.match(/the-precise-link=(.*)/); if(match) { document.write("<a href=" + decodeURIComponent(match[1]) + " style='cursor:pointer;'>follow the precise link</a>")}</script> and then click the bookmark</span>.
-    <br/><br/>If you don't have the bookmark - save it in your browser to use it now and in the future.
+    <br/><br/><span class="emphasis">If you don't have the bookmark</span> - save it in your browser to use it now and in the future.
 
     <br/><br/>There is a detailed explanation below.
   </div>
@@ -180,7 +180,12 @@ href="javascript:(function()%7Bvar%20txt%3Ddocument.location.hash.match(%2Fhref-
   <li>No any permanent process is running - all happens only when you click a bookmark. BTW, every bookmarklet is just a few hundred bytes.</li>
 </ul>
 
-<h4>Alternatives:</h4>
+<h4>Why should a client click "Resolve Precise Link" bookmarklet for every link?</h4>
+Indeed, it's annoying a bit. It would be much better, if a precise link is resolved by your browser automatically, when you visit such a link. And it's possible with a browser extension.
+<br/>I wouldn't like to develop and support extensions for all existing browser zoo. Moreover, if I do that, I should
+persuade you to install the extension as well as I now persuade you to drag&drop the "Resolve Precise Link" bookmarklet... I consider this excess. Current solution isn't perfect, but it's simple and universal.
+
+<h4>Alternatives solutions to the problem:</h4>
 In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals">a few proposals and experimental solutions of the problem arose</a>. Some of them are just wordings (proposals), others - browser-specific solutions, some stopped working for somw reasons. PreciseLink bookmarklets aim to be cross-browser (for now it works in all popular browsers except IE).
 
   </body>
