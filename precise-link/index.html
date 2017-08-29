@@ -70,7 +70,7 @@
         border-radius: 10px;
       }
 
-      .onfly-instructions .main-link {
+      .onfly-instructions .optimistic-way {
         font-size: 1.2em;
         background-color: white;
         line-height: 1.5em;
@@ -92,18 +92,13 @@
       }
 
       .onfly-instructions .alternate .thumb {
-        margin: 0 1em 1em 0;
-        width: 64px;
-        height: 64px;
+        margin: 0.3em;
         float: left;
-        background-image: url("data:image/png;base64,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");
+        font-size: 3em;
       }
 
-      .up-down {
-        transform: rotate(180deg);
-        -ms-transform: rotate(180deg);
-        -webkit-transform: rotate(180deg);
-        -moz-transform: rotate(180deg);
+      #full-feature-explanation {
+        display: none;
       }
 
     </style>
@@ -118,38 +113,29 @@
 <p>You see this page because <span class="emphasis">you are following a precise link (a link to a certain text on the target page)</span> specially wrapped so that you visit this page and become aware what it means and how to use it.</p>
 
 <center><h4>CHOOSE ONE OF THE TWO WAYS:</h4></center>
-
   <div class="alternate">
-    <div class="thumb"></div>
-
-    <script>
-      window.amendDocument = function(amendContentFactory) {
-        var match = window.location.hash.match(/the-precise-link=(.*)/);
-        if(match) {
-          document.write( amendContentFactory(decodeURIComponent(match[1])) );
-        }
-      };
-    </script>
-
+    <div class="thumb">&#x1F44D;</div>
     <span><i>You wish to use the "Precise Link" feature</i></span><br/><br/>
-    <span class="emphasis">If you have "Resolve Precise Link" bookmark in your browser</span>, <span class="main-link"><script>amendDocument(function(pLink) { return "<a href=" + pLink + " style='cursor:pointer;'>follow the precise link</a>"; })</script> and then click the bookmark</span>.
-    <br/><br/><span class="emphasis">If you don't have the bookmark</span> - save it in your browser to use it now and in the future.
+    <span class="emphasis">If you have "Resolve Precise Link" bookmark in your browser</span>,
+    <span class="optimistic-way"><span id="follow-feature-link"></span> and then click the bookmark</span>.
+    <br/><br/>
+    <span class="emphasis"></span>If you don't have the bookmark</span> - save it in your browser to use it now and in the future.
 
-    <br/><br/>There is a detailed explanation below.
+    <br/><br/>
+    <span style="cursor:pointer;" onclick="toggleFullFeatureExplanation(true)">
+      <span style="font-size: 2em; vertical-align: middle;">&#x1F914;</span>
+      <span style="text-decoration: underline;">Show the full feature explanation below</span>
+    </span>
   </div>
+
   <div class="alternate">
-    <div class="thumb up-down" ></div>
-
-    <span><i>You DON'T wish to use the "Precise Link" feature</i><br/><br/>Ignore this page and <script>amendDocument(function(pLink) { return "<a href=" + pLink.replace(/href-to-text=(.*)/, '') + " style='cursor:pointer'>just visit the target page</a>"; })</script></span>.
+    <div class="thumb">&#x1F44E;</div>
+    <span><i>You DON'T wish to use the "Precise Link" feature</i><br/><br/>
+    Ignore this page and <span id="ignore-feature-link"></span>.
   </div>
-
 </div>
 
-<script>
-  if(window.location.hash.match(/the-precise-link=/)) {
-    document.querySelector('#current-precise-link-instruction').style.display = "block";
-  }
-</script>
+<div id="full-feature-explanation">
 
 <center><h2>Would you like to be able to MAKE A HYPERLINK TO ANY TEXT ON A PAGE?</h2></center>
 
@@ -196,6 +182,44 @@ persuade you to install the extension as well as I now persuade you to drag&drop
 
 <h4>Alternatives solutions to the problem:</h4>
 In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals">a few proposals and experimental solutions of the problem arose</a>. Some of them are just wordings (proposals), others - browser-specific solutions, some stopped working for somw reasons. PreciseLink bookmarklets aim to be cross-browser (for now it works in all popular browsers except IE).
+
+</div>
+
+<script>
+  window.extractPreciseLinkFromAddress = function() {
+    var match = window.location.hash.match(/the-precise-link=(.*)/);
+    if(match) {
+      return decodeURIComponent(match[1]);
+    }
+  }
+
+  window.toggleFullFeatureExplanation = function(show) {
+    document.querySelector('#full-feature-explanation').style.display = show ? "block" : "none";
+  };
+
+  var preciseLink = extractPreciseLinkFromAddress();
+  if(!preciseLink) {
+    toggleFullFeatureExplanation(true);
+  } else {
+    window.putHyperlink = function(targetElementSelector, amendContentFactory) {
+      if(amendContentFactory) {
+        document.querySelector(targetElementSelector).innerHTML = amendContentFactory(preciseLink);
+        return true;
+      }
+      return false;
+    };
+
+    putHyperlink("#follow-feature-link", function(pLink) {
+      return "<a href=" + pLink + " style='cursor:pointer;'>follow the precise link</a>";
+    });
+
+    putHyperlink("#ignore-feature-link", function(pLink) {
+      return "<a href=" + pLink.replace(/href-to-text=(.*)/, '') + " style='cursor:pointer'>just visit the target page</a>";
+    });
+
+    document.querySelector('#current-precise-link-instruction').style.display = "block";
+  }
+</script>
 
   </body>
 </html>
