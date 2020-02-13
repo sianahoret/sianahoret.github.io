@@ -190,11 +190,11 @@ The link is organized so that you see this explanation of what it means and how 
 <h4>Additional notes</h4>
 <ul>
   <li>The text which you select before making a "precise link" should be as possible unique in the scope of the target page.</li>
-  <li>A "precise link" is the target page (where "Make Precise Link" bookmark was applied to) URL appended with an additional hash-parameter (#href-to-text=thetext).</li>
+  <li>A "precise link" is the target page's (where "Make Precise Link" bookmark was applied to) URL appended with an additional hash-parameter (#href-to-text=thetext).</li>
   <li>It does not affect the shown page content and behaviour anyway.</li>
-  <li>When you visit the target page by a "precise link" and a browser does not have "Resolve Precise Link" bookmark (or you do not click the bookmark), the page will be shown exactly as if it was visited by its original URL.</li>
-  <li>No any web service is involved into URL processing during sharing/resolving - all happens in a browser.</li>
-  <li>No any permanent process is running - all happens only when you click a bookmark. BTW, every bookmarklet is just a few hundred bytes.</li>
+  <li>When you visit the target page by a "precise link" - if the browser doesn't have "Resolve Precise Link" bookmark (or you do not click the bookmark), the page will be shown exactly as if it was visited by its original URL.</li>
+  <li>No any web service is involved into URL processing during sharing/resolving - all happens in your browser. There is intermediate redirection to the page (on github.io) with the feature explanation, when you are following a "Self-explained Precise Link".</li>
+  <li>No any special process is running - all happens only when you click a bookmark. BTW, every bookmarklet is just a few hundred bytes.</li>
 </ul>
 
 <h4>Why should a user click "Resolve Precise Link" bookmark every time after he's followed a "precise link"?</h4>
@@ -225,7 +225,7 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
     }
   }
 
-  window.extractDomain = function(url) {
+  window.extractTargetPageDomain = function(url) {
     var match = url.match(/^(.*?)[^:/]\//);
     if(match) {
       return match[0];
@@ -240,7 +240,7 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
   if(!preciseLink) {
     toggleFullFeatureExplanation(true);
   } else {
-    var shortenedTargetPageUrl = extractDomain(preciseLink) || preciseLink.substring(0, 20);
+    var shortenedTargetPageUrl = extractTargetPageDomain(preciseLink) || preciseLink.substring(0, 20);
     document.querySelector("#shortened-target-page-address").innerHTML = shortenedTargetPageUrl;
 
     window.putHyperlink = function(targetElementSelector, amendContentFactory) {
