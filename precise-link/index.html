@@ -61,10 +61,14 @@
         font-size: 1.1em;
         display: none;
         color: #256;
-        background-color: #fcffcf;
+        background-color: #ddffca;
         padding: 1.5em;
         box-shadow: 0.2em 0.2em 1em 0.2em grey;
         border-radius: 10px;
+      }
+
+      #shortened-target-page-address {
+        color:peru;
       }
 
       .onfly-instructions .optimistic-way {
@@ -89,7 +93,7 @@
       }
 
       .onfly-instructions .alternate:hover {
-        background-color: yellow;
+        background-color: #fcffcf;
       }
 
       .onfly-instructions .alternate .thumb {
@@ -118,10 +122,15 @@
 
 <div id="current-precise-link-instruction" class="onfly-instructions">
 
-<center><h3>YOU ARE NOT ON THE TARGET PAGE YET, <u>YOU ARE IN ONE STEP</u>!</h3></center>
+<center>
+  <h3>You are following a link to <span id="shortened-target-page-address"></span>...</h3>
+  <h4>Now YOU ARE NOT ON THE TARGET PAGE YET, <u>YOU ARE IN ONE STEP</u>!</h4>
+</center>
 
 <p>You see this message because <span class="emphasis">you are following a precise link (a link to a certain text on the target page)</span>.<br/>
-The link is organized so that you see this explanation of what it means and how to use it.</p>
+The link is organized so that you see this explanation of what it means and how to use it.
+</p>
+<br/>
 
 <center><h4>CHOOSE ONE OF THESE TWO WAYS:</h4></center>
   <div class="alternate">
@@ -188,10 +197,12 @@ The link is organized so that you see this explanation of what it means and how 
   <li>No any permanent process is running - all happens only when you click a bookmark. BTW, every bookmarklet is just a few hundred bytes.</li>
 </ul>
 
-<h4>Why should a client click "Resolve Precise Link" bookmark every time he follows a "precise link"?</h4>
+<h4>Why should a user click "Resolve Precise Link" bookmark every time after he's followed a "precise link"?</h4>
 Indeed, it's annoying a bit. It would be much better, if, when you follow such a link, a precisely referred text is found by your browser automatically. And it's basically possible with a browser extension/add-on.
 <br/>However I wouldn't like to develop and support extensions for all existing browser zoo. Moreover, if I do that, I should
-persuade you to install the extension as well as I now persuade you to drag&drop the "Resolve Precise Link" bookmarklet... I consider this excess. Current solution isn't perfect, but it's simple and universal.
+persuade you to install the extension as well as I now persuade you to drag&drop the "Resolve Precise Link" bookmarklet... I consider this excess.
+<br/>Current solution isn't perfect, but it's simple and universal.
+It's developed with the focus on: zero dependencies, zero infrastructure, as possible lighter requirements to a browser and network communications.
 
 <h4>Alternative solutions of the problem</h4>
 In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals">a few proposals and experimental solutions of the problem arose</a>. Some of them are just wordings (proposals), others - browser-specific solutions, many stopped working for some reasons.
@@ -214,6 +225,13 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
     }
   }
 
+  window.extractDomain = function(url) {
+    var match = url.match(/^(.*?)[^:/]\//);
+    if(match) {
+      return match[0];
+    }
+  }
+
   window.toggleFullFeatureExplanation = function(show) {
     document.querySelector('#full-feature-explanation').style.display = show ? "block" : "none";
   };
@@ -222,6 +240,9 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
   if(!preciseLink) {
     toggleFullFeatureExplanation(true);
   } else {
+    var shortenedTargetPageUrl = extractDomain(preciseLink) || preciseLink.substring(0, 20);
+    document.querySelector("#shortened-target-page-address").innerHTML = shortenedTargetPageUrl;
+
     window.putHyperlink = function(targetElementSelector, amendContentFactory) {
       if(amendContentFactory) {
         document.querySelector(targetElementSelector).innerHTML = amendContentFactory(preciseLink);
