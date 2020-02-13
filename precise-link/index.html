@@ -240,7 +240,7 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
   if(!preciseLink) {
     toggleFullFeatureExplanation(true);
   } else {
-    var shortenedTargetPageUrl = extractTargetPageDomain(preciseLink) || preciseLink.substring(0, 20);
+    var shortenedTargetPageUrl = extractTargetPageDomain(preciseLink) || preciseLink.substring(0, 30);
     document.querySelector("#shortened-target-page-address").innerHTML = shortenedTargetPageUrl;
 
     window.putHyperlink = function(targetElementSelector, amendContentFactory) {
