@@ -191,10 +191,11 @@ The link is organized so that you see this explanation of what it means and how 
 <ul>
   <li>The text which you select before making a "precise link" should be as possible unique in the scope of the target page.</li>
   <li>A "precise link" is the target page's (where "Make Precise Link" bookmark was applied to) URL appended with an additional hash-parameter (#href-to-text=thetext).</li>
-  <li>It does not affect the shown page content and behaviour anyway.</li>
+  <li>It does not affect the shown page content and behaviour anyhow.</li>
   <li>When you visit the target page by a "precise link" - if the browser doesn't have "Resolve Precise Link" bookmark (or you do not click the bookmark), the page will be shown exactly as if it was visited by its original URL.</li>
-  <li>No any web service is involved into URL processing during sharing/resolving - all happens in your browser. There is intermediate redirection to the page (on github.io) with the feature explanation, when you are following a "Self-explained Precise Link".</li>
-  <li>No any special process is running - all happens only when you click a bookmark. BTW, every bookmarklet is just a few hundred bytes.</li>
+  <li>No any web service is involved. No any processing happens anywhere except in your browser. No any data is kept anywhere. There is only one case when an intermediate wed page (sianahoret.github.io/precise-link, i.e. this one) is involved - it's when you follow a link made by "Make Self-explained Precise Link" bookmarklet. The page is shown to provide the feature explanation. And, again, nothing happens somewhere else except in your browser.</li>
+  <li>No any special process is permanently running - all happens only when you click a bookmark. After a dialog box has appeared (when you clicked any of "Make ... Precise Link" bookmark) and after the target page has been scrolled to the text referred on it (when you clicked the "Resolve Precise Link" bookmark) nothing more is executing.</li>
+  <li>Every bookmarklet is just a few hundred bytes.</li>
 </ul>
 
 <h4>Why should a user click "Resolve Precise Link" bookmark every time after he's followed a "precise link"?</h4>
@@ -210,7 +211,7 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
 
 <h4>Known issues</h4>
 <ul>
-  <li>It doesn't work within iframe.</li>
+  <li>It doesn't work for referring a text within iframe.</li>
   <li>It doesn't work in Internet Explorer, because a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/find">non-standard browser feature is used there</a>.</li>
   <li>It doesn't work on mobile devices. It's, at least, because of no any trick is implemented to make drag&dropping bookmarklets possible. And the underliying feature (see the issue with IE) might also not work there.</li>
 </ul>
