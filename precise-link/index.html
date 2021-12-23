@@ -71,6 +71,25 @@
         color:peru;
       }
 
+      .show-title-by-click {
+        font-size: 0.7em;
+        cursor: pointer;
+        /* text-decoration: underline; */
+      }
+
+      .show-title-by-click:active:after {
+        content:attr(title);
+        display: block;
+        /* text-decoration: none; */
+        word-wrap: break-word;
+        padding: 3px;
+        background: #c2cda2;
+      }
+
+      #in-one-step {
+        text-shadow: 1px 1px 0.1em white, 0 0 1.5em rgb(242, 13, 13);
+      }
+
       .onfly-instructions .optimistic-way {
         font-size: 1.2em;
         background-color: white;
@@ -123,24 +142,34 @@
 <div id="current-precise-link-instruction" class="onfly-instructions">
 
 <center>
-  <h3>You are following a link to <span id="shortened-target-page-address"></span>...</h3>
-  <h4>Now YOU ARE NOT ON THE TARGET PAGE YET, <u>YOU ARE IN ONE STEP</u>!</h4>
+  <h4>You are following a link to a certain text on <span id="shortened-target-page-address"></span>
+    <br/>
+    <span id="original-target-page-address" class="show-title-by-click">See the full target page address</span>
+  </h4>
+  <h4>Now YOU ARE NOT ON THE TARGET PAGE YET, <span id="in-one-step">YOU ARE ONE STEP FROM THE GOAL</span>!
+    <br/>
+    <span
+      class="show-title-by-click"
+      title="You see this message because you are following a precise link (a link to a certain text on the target page). The link is organized so that you see this explanation of what it means and how to use it.">
+      What does this mean?
+    </span>
+  </h4>
 </center>
 
-<p>You see this message because <span class="emphasis">you are following a precise link (a link to a certain text on the target page)</span>.<br/>
-The link is organized so that you see this explanation of what it means and how to use it.
-</p>
 <br/>
 
 <center><h4>CHOOSE ONE OF THESE TWO WAYS:</h4></center>
   <div class="alternate">
-    <center><h4>1</h4></center>
+    <center><h4>Use the feature</h4></center>
     <div class="thumb">&#x1F44D;</div>
     <span><i>You wish to use the "Precise Link" feature</i></span><br/><br/>
-    <span class="emphasis">If you have "Resolve Precise Link" bookmark in your browser</span>,
-    <span class="optimistic-way"><span id="follow-feature-link"></span> and (when you are on the target page) click the bookmark</span>.
-    <br/><br/>
-    <span class="emphasis"></span>If you don't have the bookmark yet</span> - save it now in your browser's bookmarks bar and use it ever.
+    <span class="emphasis">If you have <a class="bookmarklet" title="Show the text the Precise Link in address bar points to."
+      href="javascript:(function()%7Bvar%20txt%3Ddocument.location.hash.match(%2Fhref-to-text%3D(.%2B)%2F)%3Bif(txt)%7Bfind(decodeURIComponent(txt%5B1%5D))%3B%7Delse%7Balert(%22There%20is%20no%20Precise%20Link%20in%20the%20page%20address!%22)%7D%7D)();">Resolve Precise Link</a> bookmark in your browser:</span>
+    <ol>
+      <li class="optimistic-way"><span id="follow-feature-link"></span>
+      <li class="optimistic-way">When you are on the target page - click the bookmark.</li>
+    </ol>
+    <span class="emphasis"></span>If you don't have the bookmark yet</span> - drag and drop it into your browser's bookmarks bar.
 
     <br/><br/>
     <span style="cursor:pointer;" onclick="toggleFullFeatureExplanation(true)">
@@ -150,7 +179,7 @@ The link is organized so that you see this explanation of what it means and how 
   </div>
 
   <div class="alternate bad">
-    <center><h4>2</h4></center>
+    <center><h4>Ignore the feature</h4></center>
     <div class="thumb">&#x1F44E;</div>
     <span><i>You DON'T wish to use the "Precise Link" feature</i><br/><br/>
     Ignore this feature and <span id="ignore-feature-link"></span><br/>(you will not see which exactly text on the page the precise link points to).
@@ -173,13 +202,13 @@ The link is organized so that you see this explanation of what it means and how 
 
 <ol>
 
-  <li>ONCE. If you want <u>to resolve precise links</u> (received from somebody) - drag and drop <a class="bookmarklet" title="Show the text the Precise Link in address bar points to."
+  <li><b>ONCE</b>. If you want <b>to resolve precise links</b> (received from somebody) - drag and drop <a class="bookmarklet" title="Show the text the Precise Link in address bar points to."
     href="javascript:(function()%7Bvar%20txt%3Ddocument.location.hash.match(%2Fhref-to-text%3D(.%2B)%2F)%3Bif(txt)%7Bfind(decodeURIComponent(txt%5B1%5D))%3B%7Delse%7Balert(%22There%20is%20no%20Precise%20Link%20in%20the%20page%20address!%22)%7D%7D)();">Resolve Precise Link</a> to the bookmarks bar in your browser.</li>
-  <li>ONCE. If you want <u>to create precise links</u> (to save for future use or to share with somebody) - drag and drop <a class="bookmarklet" title="Make a Precise Link to the text selection on this page."
+  <li><b>ONCE</b>. If you want <b>to create precise links</b> (to save for future use or to share with somebody) - drag and drop <a class="bookmarklet" title="Make a Precise Link to the text selection on this page."
   href="javascript:(function()%7Bvar%20txt%3D%22%22%2B(window.getSelection%3Fwindow.getSelection()%3Adocument.getSelection%3Fdocument.getSelection()%3Adocument.selection.createRange().text)%3Btxt%3Dtxt.replace(%2F%5Cr%5Cn%7C%5Cr%7C%5Cn%2Fg%2C%22%20%2C%22)%3Bif(!txt)%7Btxt%3Dalert(%22Select%20the%20text%20you%20want%20to%20refer%20to!%22%2C%22%22)%3Breturn%3B%7Dif(txt!%3Dnull)%7Bvar%20addition%20%3D%20%22%23href-to-text%3D%22%2BencodeURIComponent(txt)%3Bvar%20preciseLink%3Ddocument.location.href.replace(%2F(%23(href-to-text%7Cthe-precise-link).*)%3F%24%2F%2Caddition)%3Bprompt(%22The%20link%20is%20ready!%20Copy%20and%20use%20it%3A%22%2C%20preciseLink)%3B%7D%7D)()" style="grab">Make Precise Link</a> to the bookmarks bar in your browser. <span class="extra-note">
   <br/>Alternatively, if you want to share a precise link with not prepared people, you can use <a class="bookmarklet" href="javascript:(function()%7Bvar%20txt%3D%22%22%2B(window.getSelection%3Fwindow.getSelection()%3Adocument.getSelection%3Fdocument.getSelection()%3Adocument.selection.createRange().text)%3Btxt%3Dtxt.replace(%2F%5Cr%5Cn%7C%5Cr%7C%5Cn%2Fg%2C%22%20%2C%22)%3Bif(!txt)%7Btxt%3Dalert(%22Select%20the%20text%20you%20want%20to%20refer%20to!%22%2C%22%22)%3Breturn%3B%7Dif(txt!%3Dnull)%7Bvar%20addition%20%3D%20%22%23href-to-text%3D%22%2BencodeURIComponent(txt)%3Bvar%20preciseLink%3Ddocument.location.href.replace(%2F(%23(href-to-text%7Cthe-precise-link).*)%3F%24%2F%2Caddition)%3Bvar%20wrappedPreciseLink%3D%22http%3A%2F%2Fsianahoret.github.io%2Fprecise-link%23the-precise-link%3D%22%2BencodeURIComponent(preciseLink)%3Bprompt(%22The%20link%20is%20ready!%20Copy%20and%20use%20it%3A%22%2CwrappedPreciseLink)%3B%7D%7D)()">Make Self-explained Precise Link</a>. This bookmarklet wraps a precise link in such a way that when you share it with somebody, the addressee would not need to know that this link is "precise" and what to do to resolve the link - he would be forwarded to an intermediate page containing necessary explanations.</span></li>
 
-  <li>EVER. Use the bookmarks as shown on the picture below (follow 1-2-3-4-5-6 actions):</li>
+  <li><b>EVER</b>. Use the bookmarks as shown on the picture below (follow 1-2-3-4-5-6 actions):</li>
 
 </ol>
 
@@ -200,9 +229,9 @@ The link is organized so that you see this explanation of what it means and how 
 
 <h4>Why should a user click "Resolve Precise Link" bookmark every time after he's followed a "precise link"?</h4>
 Indeed, it's annoying a bit. It would be much better, if, when you follow such a link, a precisely referred text is found by your browser automatically. And it's basically possible with a browser extension/add-on.
-<br/>However I wouldn't like to develop and support extensions for all existing browser zoo. Moreover, if I do that, I should
+<br/><br/>However I wouldn't like to develop and support extensions for all existing browser zoo. Moreover, if I do that, I should
 persuade you to install the extension as well as I now persuade you to drag&drop the "Resolve Precise Link" bookmarklet... I consider this excess.
-<br/>Current solution isn't perfect, but it's simple and universal.
+<br/><br/>Current solution isn't perfect, but it's simple and usable in the majority of possible cases.
 It's developed with the focus on: zero dependencies, zero infrastructure, as possible lighter requirements to a browser and network communications.
 
 <h4>Alternative solutions of the problem</h4>
@@ -212,7 +241,7 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
 <h4>Known issues</h4>
 <ul>
   <li>It doesn't work for referring a text within iframe.</li>
-  <li>It doesn't work in Internet Explorer, because a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/find">non-standard browser feature is used there</a>.</li>
+  <li>It doesn't work in Internet Explorer, because a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/find">non-standard browser feature is used</a>.</li>
   <li>It doesn't work on mobile devices. It's, at least, because of no any trick is implemented to make drag&dropping bookmarklets possible. And the underliying feature (see the issue with IE) might also not work there.</li>
 </ul>
 
@@ -241,8 +270,10 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
   if(!preciseLink) {
     toggleFullFeatureExplanation(true);
   } else {
-    var shortenedTargetPageUrl = extractTargetPageDomain(preciseLink) || preciseLink.substring(0, 30);
+    var originalTrgetPageUrl = preciseLink.replace(/#?href-to-text=(.*)/, '');
+    var shortenedTargetPageUrl = (extractTargetPageDomain(preciseLink) || preciseLink.substring(0, 30)) + "...";
     document.querySelector("#shortened-target-page-address").innerHTML = shortenedTargetPageUrl;
+    document.querySelector("#original-target-page-address").setAttribute("title", originalTrgetPageUrl);
 
     window.putHyperlink = function(targetElementSelector, amendContentFactory) {
       if(amendContentFactory) {
@@ -253,11 +284,11 @@ In the past <a href="https://en.wikipedia.org/wiki/Fragment_identifier#Proposals
     };
 
     putHyperlink("#follow-feature-link", function(pLink) {
-      return "<a href=" + pLink + " style='cursor:pointer;'>follow the precise link</a>";
+      return "<a href=" + pLink + " style='cursor:pointer;'>Follow the precise link</a>";
     });
 
     putHyperlink("#ignore-feature-link", function(pLink) {
-      return "<a href=" + pLink.replace(/href-to-text=(.*)/, '') + " style='cursor:pointer'>just visit the target page</a>";
+      return "<a href=" + originalTrgetPageUrl + " style='cursor:pointer'>just visit the target page</a>";
     });
 
     document.querySelector('#current-precise-link-instruction').style.display = "block";
